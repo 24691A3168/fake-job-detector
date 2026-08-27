@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fake Job Posting Detector</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f3f6fa;margin:0;padding:30px}
+.container{max-width:850px;margin:auto;background:#fff;padding:30px;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+h1{text-align:center;margin-bottom:8px}
+.subtitle{text-align:center;color:#666;margin-bottom:25px}
+label{display:block;font-weight:bold;margin:15px 0 6px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #ccd3dc;border-radius:8px;font-size:15px}
+textarea{min-height:100px;resize:vertical}
+button{width:100%;padding:14px;margin-top:24px;border:0;border-radius:8px;background:#1769e0;color:white;font-size:17px;font-weight:bold;cursor:pointer}
+button:hover{opacity:.9}
+.result{margin-top:25px;padding:20px;border-radius:10px;text-align:center;background:#eef3f8}
+.real{background:#e9f8ed}
+.fraud{background:#fff0f0}
+.error{margin-top:20px;padding:15px;background:#fff0f0;color:#a00000;border-radius:8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+@media(max-width:650px){body{padding:12px}.container{padding:20px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🔍 Fake Job Posting Detector</h1>
+<p class="subtitle">Enter job details to estimate whether a posting is real or fraudulent.</p>
+
+<form action="/predict" method="POST">
+<label>Job Title *</label>
+<input name="title" required>
+
+<div class="grid">
+<div><label>Location</label><input name="location"></div>
+<div><label>Department</label><input name="department"></div>
+</div>
+
+<label>Company Profile</label>
+<textarea name="company_profile"></textarea>
+
+<label>Job Description *</label>
+<textarea name="description" required></textarea>
+
+<label>Requirements</label>
+<textarea name="requirements"></textarea>
+
+<label>Benefits</label>
+<textarea name="benefits"></textarea>
+
+<div class="grid">
+<div><label>Salary Range</label><input name="salary_range"></div>
+<div><label>Employment Type</label><input name="employment_type"></div>
+<div><label>Required Experience</label><input name="required_experience"></div>
+<div><label>Required Education</label><input name="required_education"></div>
+<div><label>Industry</label><input name="industry"></div>
+<div><label>Function</label><input name="function"></div>
+</div>
+
+<div class="grid">
+<div><label>Telecommuting</label><select name="telecommuting"><option value="0">No</option><option value="1">Yes</option></select></div>
+<div><label>Company Logo</label><select name="has_company_logo"><option value="0">No</option><option value="1">Yes</option></select></div>
+</div>
+
+<label>Has Questions</label>
+<select name="has_questions"><option value="0">No</option><option value="1">Yes</option></select>
+
+<button type="submit">Check Job Posting</button>
+</form>
+
+{% if prediction %}
+<div class="result {% if prediction == 'REAL' %}real{% else %}fraud{% endif %}">
+<h2>{% if prediction == 'REAL' %}✅ REAL{% else %}⚠️ FRAUDULENT{% endif %}</h2>
+<p>Fraud Probability: <strong>{{ probability }}%</strong></p>
+</div>
+{% endif %}
+
+{% if error %}
+<div class="error"><strong>Error:</strong> {{ error }}</div>
+{% endif %}
+</div>
+</body>
+</html>

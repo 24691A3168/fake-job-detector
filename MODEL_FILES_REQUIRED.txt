@@ -1,0 +1,7 @@
+Before deploying, place these three files in this folder:
+- fraudulent_job_model.keras
+- tfidf_vectorizer.pkl
+- categorical_preprocessor.pkl
+
+They are generated when fake_job_posting_detection.py completes training.
+The CSV dataset is only needed for training, not for prediction/deployment.
